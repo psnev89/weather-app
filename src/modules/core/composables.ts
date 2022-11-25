@@ -21,7 +21,7 @@ export const useNavigatorGeolocation = function () {
     error.value = err.message;
     lastUpdate.value = null;
   }
-  function getCurrentPositionWrapper() {
+  function getCurrentPositionWrapper(): Promise<GeolocationPosition> {
     return new Promise((resolve, reject) => {
       window.navigator?.geolocation?.getCurrentPosition?.(resolve, reject, {
         timeout: TIMEOUT,
@@ -33,8 +33,8 @@ export const useNavigatorGeolocation = function () {
     try {
       const geo: GeolocationPosition = await getCurrentPositionWrapper();
       onSuccess(geo);
-    } catch (err: GeolocationPositionError | Error) {
-      onError(err);
+    } catch (err) {
+      onError(err as Error);
     } finally {
       isGettingGeolocation.value = false;
     }

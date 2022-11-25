@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import type { Ref } from "vue";
-import { useNavigatorGeolocation } from "./modules/core/useNavigatorGeolocation";
+import { useNavigatorGeolocation } from "./modules/core/composables";
 import { useWeatherService } from "./modules/weather/service";
 import { WeatherInfo } from "./modules/weather/types";
 import AppCard from "./ui/AppCard.vue";
@@ -9,7 +9,7 @@ import AppInfoDisplay from "./ui/AppInfoDisplay.vue";
 
 const { getWeatherInfo } = useWeatherService();
 
-const { geolocation, get: getCoords } = useNavigatorGeolocation();
+const { geolocation, error: geoError, get: getCoords } = useNavigatorGeolocation();
 
 const loadingWeatherData: Ref<boolean> = ref(false);
 const weather: Ref<WeatherInfo | null> = ref(null);
@@ -24,7 +24,7 @@ onMounted(async () => {
     geolocation.value?.longitude as number
   );
 
-  if (weatherError) {
+  if (weatherError || geoError) {
     error.value = weatherError;
   }
   weather.value = weatherData;
