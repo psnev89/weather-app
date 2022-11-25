@@ -1,5 +1,3 @@
-import { processExpression } from "@vue/compiler-core";
-import { TaskResult } from "../core/types";
 import { httpClient } from "../core/http";
 
 const API_KEY = import.meta.env.VITE_OPEN_WEATHER_API_KEY;
