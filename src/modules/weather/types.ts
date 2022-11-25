@@ -35,12 +35,14 @@ interface IWeatherInfo {
 }
 
 export type WeatherApiData = {
-  weather: {
-    id: number;
-    main: string;
-    description: string;
-    icon: string;
-  };
+  weather: [
+    {
+      id: number;
+      main: string;
+      description: string;
+      icon: string;
+    }
+  ];
   main: {
     temp: number;
     feels_like: number;
@@ -107,13 +109,11 @@ export class WeatherInfo implements IWeatherInfo {
   }
 
   static fromWeatherApi(weatherApi: WeatherApiData): WeatherInfo {
-    console.log({ weatherApi });
-
     const weatherInput: WeatherInfoInput = {
       location: `${weatherApi.name}, ${weatherApi.sys.country}`,
-      main: weatherApi.weather.main,
-      description: weatherApi.weather.description,
-      icon: weatherApi.weather.icon,
+      main: weatherApi.weather[0]?.main,
+      description: weatherApi.weather[0]?.description,
+      icon: weatherApi.weather[0]?.icon,
       temperature: weatherApi.main.temp,
       feel: weatherApi.main.feels_like,
       pressure: weatherApi.main.pressure,
@@ -132,5 +132,25 @@ export class WeatherInfo implements IWeatherInfo {
 
   get IconUrl() {
     return `http://openweathermap.org/img/wn/${this.icon}@2x.png`;
+  }
+
+  get CurrentTemperature() {
+    return `${this.temperature}ºC`;
+  }
+
+  get Feel() {
+    return `${this.feel}ºC`;
+  }
+
+  get MinTemperature() {
+    return `${this.minTemperature}ºC`;
+  }
+
+  get MaxTemperature() {
+    return `${this.maxTemperature}ºC`;
+  }
+
+  get WindSpeed() {
+    return `${this.wind.speed} m/s`;
   }
 }
